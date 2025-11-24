@@ -38,6 +38,18 @@ padding: 2rem;
 font-size: 0.9rem;
 color: #555;
 }
+.audio-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;        /* space between image and audio */
+  margin-bottom: 1rem;
+}
+
+.audio-row img {
+  width: 150px;     /* adjust size as needed */
+  border-radius: 8px;
+  object-fit: cover;
+}
 </style>
 </head>
 <body>
@@ -51,11 +63,13 @@ color: #555;
 <div class="audio-card">
 <h3>Generated Sample 1 (without Guidance):</h3>
 <p>Prompt: Beginner Saxophone Practice Slow Ascending Chromatic Scale</p>
+<img src="images/chord_no_guidance.png" alt="Spectrogram for ChordsEx1">
 <audio controls>
 <source src="audio/ChordsEx1.wav" type="audio/wav" />
 </audio>
 <h3>Generated Sample 2 (with Guidance):</h3>
 <p>Panflute Chromatic Scale</p>
+<img src="images/chord_guidance.png" alt="Spectrogram for ChordsEx2">
 <audio controls>
 <source src="audio/ChordsEx2.wav" type="audio/wav" />
 </audio>
@@ -66,12 +80,13 @@ color: #555;
 <div class="audio-card">
 <h3>Target Audio: Nylon Guitar</h3>
 <audio controls>
-<source src="audio/Nylon_Target.m4a" type="audio/mp3" />
+<source src="audio/Nylon_Target.wav" type="audio/wav" />
 </audio>
 <h3>Nylon Guitar, Pitch Guidance</h3>
 <p>Prompt: nylon guitar country twang light</p>
+<img src="images/melody_guidance.png" alt="Spectrogram for Nylon_Guitar">
 <audio controls>
-<source src="audio/Nylon_Guitar.m4a" type="audio/mp3" />
+<source src="audio/Nylon_Guitar.wav" type="audio/wav" />
 </audio>
 </div>
 
