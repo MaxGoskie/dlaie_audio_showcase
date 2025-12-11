@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -141,10 +161,10 @@ ul.task-list li input[type="checkbox"] {
   <ul class="collapse">
   <li><a href="#deep-learning-briefer" id="toc-deep-learning-briefer" class="nav-link" data-scroll-target="#deep-learning-briefer">Deep Learning Briefer</a></li>
   <li><a href="#getting-up-to-speed" id="toc-getting-up-to-speed" class="nav-link" data-scroll-target="#getting-up-to-speed">Getting Up to Speed</a></li>
+  <li><a href="#the-leaderboard-competition" id="toc-the-leaderboard-competition" class="nav-link" data-scroll-target="#the-leaderboard-competition">The Leaderboard Competition</a></li>
   </ul></li>
   <li><a href="#conclusion-and-discussion" id="toc-conclusion-and-discussion" class="nav-link" data-scroll-target="#conclusion-and-discussion">Conclusion and Discussion</a></li>
-  <li><a href="#poster-presented-at-belmont-universitys-surs-2025" id="toc-poster-presented-at-belmont-universitys-surs-2025" class="nav-link" data-scroll-target="#poster-presented-at-belmont-universitys-surs-2025">Poster Presented at Belmont University’s SURS 2025</a></li>
-  <li><a href="#acknowledgement" id="toc-acknowledgement" class="nav-link" data-scroll-target="#acknowledgement">Acknowledgement</a></li>
+  <li><a href="#poster-presented-at-belmont-universitys-science-undergraduate-research-symposium-2025" id="toc-poster-presented-at-belmont-universitys-science-undergraduate-research-symposium-2025" class="nav-link" data-scroll-target="#poster-presented-at-belmont-universitys-science-undergraduate-research-symposium-2025">Poster Presented at Belmont University’s Science Undergraduate Research Symposium 2025</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -163,7 +183,7 @@ ul.task-list li input[type="checkbox"] {
 <hr>
 <section id="abstract" class="level2">
 <h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
-<p>We present an accessible approach to controllable audio generation that leverages guidance-based flow models to create audio. These models operate by learning latent representations of audio and decoding them. A project-based course was implemented where students explored generative audio using Stable Audio Open. Using chords, melody, and beat as core guidance mechanisms, a custom guidance model was built using mix tracks from Belmont University’s audio archives to steer generation toward higher stylistic coherence. Beyond technical outcomes, this approach highlights the value of interactive, hands-on learning in audio AI education where students learn by deeply engaging with model training, evaluation, and creative iteration. However, the results were ultimately unsatisfactory due to numerous limitations that constrained both technical performance and pedagogical impact.</p>
+<p>We present an accessible approach to controllable audio generation that leverages guidance-based flow models to create audio. These models operate by learning latent representations of audio and decoding them. A project-based course was implemented where students explored generative audio using Stable Audio Open. Using chords, melody, and beat as core guidance mechanisms, a custom guidance model was built using mix tracks from Belmont University’s audio archives to steer generation toward higher stylistic coherence. Beyond technical outcomes, this approach highlights the value of interactive, hands-on learning in audio AI education where students learn by deeply engaging with model training, evaluation, and creative iteration. This report details work in progress, as current results show poor audio quality, potentially due to limitations in the Apple MPS backend of PyTorch. This work will be continued and updated by a subset of authors during 2026.</p>
 </section>
 <section id="project-overview" class="level2">
 <h2 class="anchored" data-anchor-id="project-overview">Project Overview</h2>
@@ -171,8 +191,8 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>In generative AI, flow-based models have become a powerful technique that offers a simulation-free alternative to traditional diffusion-based approaches. At its core, flow matching involves learning a vector field that transports randomized samples to a complex target distribution along a predefined path. Unlike score-based diffusion models that rely on stochastic sampling and iterative denoising, flow matching directly regresses the velocity field needed to traverse this path, enabling more efficient and stable training. Prior research has adapted this framework to operate within learned latent representations, allowing for scalable generation across images and audio. Training-based guidance further enhances flow models by conditioning the learned velocity field on structured features. This research explores whether guidance-based flow-matching models can be applied to musical features like chords, melody, and beats to shape the output in latent space and improve audio quality.</p>
-<p>Stable Audio Open is an open-source generative text-to-audio model developed by Stability AI that produces stereo audio at 44.1kHz from descriptive prompts. Since Stable Audio Open is already built on a flow-matching architecture, it provided an ideal foundation for integrating structured guidance. Using this as the baseline model and then incorporating plugin driven musical analysis to condition the latent velocity fields enables evaluation of whether embedding musical priors into the generative process leads to perceptually richer and more stylistically coherent audio outputs.</p>
+<p>In generative AI, flow-based models have become a powerful technique that offers a simulation-free alternative to traditional diffusion-based approaches <span class="citation" data-cites="hawley2025flowwithwhat"><a href="#ref-hawley2025flowwithwhat" role="doc-biblioref">[1]</a></span>. At its core, flow matching involves learning a vector field that transports randomized samples to a complex target distribution along a predefined path. Unlike score-based diffusion models that rely on stochastic sampling and iterative denoising, flow matching directly regresses the velocity field needed to traverse this path, enabling more efficient and stable training <span class="citation" data-cites="lipman2023flow"><a href="#ref-lipman2023flow" role="doc-biblioref">[2]</a></span>. Prior research has adapted this framework to operate within learned latent representations, allowing for scalable generation across images and audio <span class="citation" data-cites="dao2023flowmatchinglatentspace"><a href="#ref-dao2023flowmatchinglatentspace" role="doc-biblioref">[3]</a></span>. Training-based guidance further enhances flow models by conditioning the learned velocity field on structured features <span class="citation" data-cites="feng2025guidanceflowmatching"><a href="#ref-feng2025guidanceflowmatching" role="doc-biblioref">[4]</a></span>. This research explores whether guidance-based flow-matching models can be applied to musical features like chords, melody, and beats to shape the output in latent space and improve audio quality.</p>
+<p>Stable Audio Open is an open-source generative text-to-audio model developed by Stability AI that produces stereo audio at 44.1kHz from descriptive prompts <span class="citation" data-cites="evans2024stableaudioopen"><a href="#ref-evans2024stableaudioopen" role="doc-biblioref">[5]</a></span>. Since Stable Audio Open is already built on a flow-matching architecture, it provided an ideal foundation for integrating structured guidance. Using this as the baseline model and then incorporating plugin driven musical analysis to condition the latent velocity fields enables evaluation of whether embedding musical priors into the generative process leads to perceptually richer and more stylistically coherent audio outputs.</p>
 <p>Moreover, this paper focuses on the importance of a hands-on project-based approach to AI education. Experiential learning, i.e.&nbsp;learning through direct experience, has become increasingly vital in AI education, especially as models grow more complex and abstract. Rather than relying solely on lectures or passive content consumption, such immersion fosters deeper conceptual understanding and retention.</p>
 </section>
 <section id="background" class="level2">
@@ -180,13 +200,13 @@ ul.task-list li input[type="checkbox"] {
 <p>This section provides foundational context for the techniques employed in this research. We first introduce flow models as a generative framework, then discuss how guidance mechanisms can be integrated to steer generation toward desired outputs. Understanding these concepts is essential for appreciating how musical features can be embedded into the latent generation process.</p>
 <section id="what-is-a-flow-model" class="level3">
 <h3 class="anchored" data-anchor-id="what-is-a-flow-model">What is a Flow Model?</h3>
-<p>A flow model learns a continuous transformation that maps a simple noise distribution to a complex data distribution by following a differential equation over time. Flow matching provides a way to train these models by directly regressing the velocity field that moves a sample along a chosen path from noise to data. Because the method learns the true deterministic velocity rather than relying on stochastic denoising steps, it simplifies training and avoids the iterative noise-removal loops used in diffusion-based approaches.</p>
+<p>A flow model learns a continuous transformation that maps a simple noise distribution to a complex data distribution by following a differential equation over time. Flow matching provides a way to train these models by directly regressing the velocity field that moves a sample along a chosen path from noise to data. Because the method learns the true deterministic velocity rather than relying on stochastic denoising steps, it simplifies training and avoids the iterative noise-removal loops used in diffusion-based approaches <span class="citation" data-cites="lipman2023flow"><a href="#ref-lipman2023flow" role="doc-biblioref">[2]</a></span>.</p>
 </section>
 <section id="what-is-guidance" class="level3">
 <h3 class="anchored" data-anchor-id="what-is-guidance">What is Guidance?</h3>
-<p>Guidance methods can be used to add more precise controls to a flow model. In essence, guidance adjusts a generative model’s direction repeatedly during its generation towards some desired output. Guidance was originally used as a method for diffusion models, but recent results have shown that the same methods can be used to add controls to flow models. For flow models, guidance methods act on the velocity field, adding extra velocity at each step by evaluating the likelihood of reaching a desired condition at the current step. In classifier guidance, this desired condition is determined by the likelihood of matching an external classifier. The direction of the adjustment is found by calculating the gradient of the classifier log-likelihood.</p>
-<p>PnP-Flow offers an alternative approach by adjusting the sample directly rather than modifying the velocity field. At each step, the method applies the gradient correction, projects back onto the flow trajectory (this is is easy to do with the assumption of the straightened paths from the ReFlow process), and then applies a denoiser, computing a new estimate. This cycle enables effective inference-time control even for models with nearly linear rectified paths. In practice, the approach allows external constraints to be incorporated while keeping the sample close to the model’s learned path, as demonstrated in recent work on plug-and-play flow matching.</p>
-<p><img src="https://hackmd.io/_uploads/Bk8RLKuzbl.png" class="img-fluid" alt="guidance"> <em>This diagram illustrates how Δv corrects the predicted flow to reach the true target trajectory.</em></p>
+<p>Guidance methods can be used to add more precise controls to a flow model. In essence, guidance adjusts a generative model’s direction repeatedly during its generation towards some desired output. Guidance was originally used as a method for diffusion models <span class="citation" data-cites="ho2022classifier bansal2023universal"><a href="#ref-ho2022classifier" role="doc-biblioref">[6]</a>, <a href="#ref-bansal2023universal" role="doc-biblioref">[7]</a></span>, but recent results have shown that the same methods can be used to add controls to flow models <span class="citation" data-cites="gao2025diffusionmeetsflow feng2025guidanceflowmatching"><a href="#ref-feng2025guidanceflowmatching" role="doc-biblioref">[4]</a>, <a href="#ref-gao2025diffusionmeetsflow" role="doc-biblioref">[8]</a></span>. For flow models, guidance methods act on the velocity field, adding extra velocity at each step by evaluating the likelihood of reaching a desired condition at the current step. In classifier guidance, this desired condition is determined by the likelihood of matching an external classifier. The direction of the adjustment is found by calculating the gradient of the classifier log-likelihood <span class="citation" data-cites="Hawley_2025"><a href="#ref-Hawley_2025" role="doc-biblioref">[9]</a></span>.</p>
+<p>PnP-Flow offers an alternative approach by adjusting the sample directly rather than modifying the velocity field. At each step, the method applies the gradient correction, projects back onto the flow trajectory (this is easy to do with the assumption of the straightened paths from the ReFlow process), and then applies a denoiser, computing a new estimate. This cycle enables effective inference-time control even for models with nearly linear rectified paths. In practice, the approach allows external constraints to be incorporated while keeping the sample close to the model’s learned path, as demonstrated in recent work on plug-and-play flow matching.<span class="citation" data-cites="martin2025pnpflowplugandplayimagerestoration"><a href="#ref-martin2025pnpflowplugandplayimagerestoration" role="doc-biblioref">[10]</a></span></p>
+<p><img src="https://hackmd.io/_uploads/Bk8RLKuzbl.png" class="img-fluid" alt="guidance"> <em>This diagram illustrates how Δv corrects the predicted flow to reach the true target trajectory. Source: <span class="citation" data-cites="Hawley_2025"><a href="#ref-Hawley_2025" role="doc-biblioref">[9]</a></span></em></p>
 </section>
 </section>
 <section id="methodology" class="level2">
@@ -194,10 +214,10 @@ ul.task-list li input[type="checkbox"] {
 <p>Our approach extends Stable Audio Open with guidance mechanisms targeting three core musical attributes: continuous pitch, discrete pitch, and beat. Each guidance type required developing or adapting differentiable analysis tools that could propagate gradients through the generation process. The following subsections detail the implementation of each guidance mechanism, the modifications required to existing libraries, and the integration strategy with the base model’s callback loop.</p>
 <section id="continuous-pitch" class="level3">
 <h3 class="anchored" data-anchor-id="continuous-pitch">Continuous Pitch</h3>
-<p>The continuous pitch section of this paper explored finding a library to carry gradients through the pitch classification process on a continuous scale. While unsuccessful in finding a exact library to accomplish this goal, torchcrepe was an exact implementation of CREPE which allowed for the good representation of pitch estimation.</p>
+<p>The continuous pitch section of this paper explored finding a library to carry gradients through the pitch classification process on a continuous scale. While unsuccessful in finding a exact library to accomplish this goal, torchcrepe <span class="citation" data-cites="morrison_torchcrepe_2023"><a href="#ref-morrison_torchcrepe_2023" role="doc-biblioref">[11]</a></span> was an exact implementation of CREPE <span class="citation" data-cites="kim2018crepe"><a href="#ref-kim2018crepe" role="doc-biblioref">[12]</a></span> which allowed for the good representation of pitch mestimation.</p>
 <p>From this baseline, a fork of the torchcrepe library was taken and the following changes were made:</p>
 <ol type="1">
-<li>Removed <span class="citation" data-cites="with">@with</span> torch.nograd()</li>
+<li>Removed <span class="citation" data-cites="with"><a href="#ref-with" role="doc-biblioref"><strong>with?</strong></a></span> torch.nograd()</li>
 <li>Replaced the viterbi decoder with softmax from torch.nn.functional</li>
 <li>Replaced resampling process with torchaudio.functional.resample</li>
 <li>Added a parameter to the library to control whether to use the gradient implementation.</li>
@@ -208,7 +228,7 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="discrete-pitch">Discrete Pitch</h3>
 <p>The discrete pitch guidance approach focused on steering generation toward specific musical notes rather than continuous frequency values. Unlike continuous pitch estimation, discrete pitch classification maps audio to one of twelve semitone classes within an octave, providing a more musically meaningful representation for harmonic content.</p>
 <p>For this implementation, we utilized a pretrained chord recognition model that outputs probability distributions over pitch classes. The model processes mel-spectrogram representations of the decoded audio at each generation step. To enable gradient flow, we replaced argmax operations with softmax temperature scaling, allowing the classification outputs to remain differentiable while still approximating discrete note selection.</p>
-<p>The guidance signal is computed by comparing the predicted pitch class distribution against a target distribution representing the desired note or chord. Cross-entropy loss between these distributions provides the gradient signal that adjusts the latent velocity field. This approach aligns with recent work on posterior sampling in flow models, where likelihood gradients guide generation toward target conditions.</p>
+<p>The guidance signal is computed by comparing the predicted pitch class distribution against a target distribution representing the desired note or chord. Cross-entropy loss between these distributions provides the gradient signal that adjusts the latent velocity field. This approach aligns with recent work on posterior sampling in flow models, where likelihood gradients guide generation toward target conditions <span class="citation" data-cites="kim2025flowdps"><a href="#ref-kim2025flowdps" role="doc-biblioref">[13]</a></span>.</p>
 </section>
 <section id="beat" class="level3">
 <h3 class="anchored" data-anchor-id="beat">Beat</h3>
@@ -234,7 +254,7 @@ ul.task-list li input[type="checkbox"] {
 <p>The continuous pitch section of this project faced many present challenges pertaining to effective generation of audio. While torchcrepe was effective in the implementation of a callback loop with stable audio open small, issues were present which are listed below.</p>
 <ol type="1">
 <li>Condensing ranges for the target pitch and the model pitch at each step, comparing them on a continuous scale lead to high loss. This high loss would have a difference that is too large for the model to handle.</li>
-<li>Rewriting torchcrepe in a hasty fashion and switching out Viterbi for Softmax resulted in less accurate pitch classification.</li>
+<li>Rewriting torchcrepe <span class="citation" data-cites="morrison_torchcrepe_2023"><a href="#ref-morrison_torchcrepe_2023" role="doc-biblioref">[11]</a></span> in a hasty fashion and switching out Viterbi for Softmax resulted in less accurate pitch classification.</li>
 </ol>
 </section>
 <section id="discrete-pitch-limitations" class="level3">
@@ -257,12 +277,17 @@ ul.task-list li input[type="checkbox"] {
 <p>Littered throughout this post are references to the slightly fragmented and disjointed approach taken by fifteen students and an instructor with different educational backgrounds, existing knowledge, computational resources, and working environments. Although many might see this as a significant obstacle to teaching an undergraduate-level class, especially in a field that requires a hands-on approach to learning, these differences enriched the learning experience of each student by offering a concise foundation to Deep Learning, creating healthy competition between students, and providing a series of Jupyter notebooks which led students from basic MNIST classification to audio guidance. While the final goal of writing and submitting a paper proved to be a goal out of the reach of fifteen undergraduates (and one grad student), there were significant educational outcomes. Turning students from Deep Learning beginners and novices into intermediates in one semester is no simple feat, and the structure of this class – from its helpful learning resources to its exciting competitions – could serve as a framework for future classes.</p>
 <section id="deep-learning-briefer" class="level3">
 <h3 class="anchored" data-anchor-id="deep-learning-briefer">Deep Learning Briefer</h3>
-<p>The class began with a speed run through the fundamental building blocks of Deep Learning. Layers, neurons, mulit-layer perceptrons, activation functions, gradient descent, data loaders, epochs, etc. – all the language and concepts that Machine Learning practitioners take for granted were covered at a blistering pace during the first two weeks of the class. For those with experience in Deep Learning, these two weeks were a refreshing recap; for those without any experience, the two weeks were more akin to a baptism by fire. While the speed at which the concepts were covered did not allow for a more methodical approach to the mathematical concepts behind gradient descent or the nuances between every single activation function, the briefer allowed students to quickly acquaint themselves with the essential building blocks of Deep Learning. This was part of a deliberate decision to push students out of the comfort zone students usually inhabit during undergrad and towards more exciting and innovative projects.</p>
+<p>The class began with a speed run through the fundamental building blocks of Deep Learning. Layers, neurons, multi-layer perceptrons, activation functions, gradient descent, data loaders, epochs, etc. – all the language and concepts that Machine Learning practitioners take for granted were covered at a blistering pace during the first two weeks of the class. For those with experience in Deep Learning, these two weeks were a refreshing recap; for those without any experience, the two weeks were more akin to a baptism by fire. While the speed at which the concepts were covered did not allow for a more methodical approach to the mathematical concepts behind gradient descent or the nuances between every single activation function, the briefer allowed students to quickly acquaint themselves with the essential building blocks of Deep Learning. This was part of a deliberate decision to push students out of the comfort zone students usually inhabit during undergrad and towards more exciting and innovative projects.</p>
 </section>
 <section id="getting-up-to-speed" class="level3">
 <h3 class="anchored" data-anchor-id="getting-up-to-speed">Getting Up to Speed</h3>
 <p>For students with different levels of Python experience and other languages, the early notebooks were all about balancing an understanding of machine learning concepts while building the Python skills needed to implement them. We began with the distinction between Machine Learning and Deep Learning, overtime moving from a conceptual understanding to direct implementation.</p>
-<p>The course follows an evolving stack of libraries: beginning with FastAi to reduce complexity, and maturing towards PyTorch, with sparse implementations of Lightning to introduce new architectures. Moving from classic Machine Learning technieuqes to learning the beginnings of Convolutional Neural Networks (CNN), Residual skip connections, UNets, Auto Encoders/Variational Auto Encoders, Flow Models, then guidance.</p>
+<p>The course follows an evolving stack of libraries: beginning with FastAi to reduce complexity, and maturing towards PyTorch, with sparse implementations of Lightning when introducing more advanced architectures. Our path started in classic machine learning techniques, progressing from Convolutional Neural Networks, residual skip connections, UNets, Auto Encoders and Variational Auto Encoders, Flow Models, and finally guidance.</p>
+</section>
+<section id="the-leaderboard-competition" class="level3">
+<h3 class="anchored" data-anchor-id="the-leaderboard-competition">The Leaderboard Competition</h3>
+<p>Having gained experience with Artificial Neural Networks, Autoencoders, and Flow Models, the students took another massive leap forward during the inaugural Latent Flow Matching Leaderboard Competition. The students’ task was to “build and evaluate a complete latent flow matching system combining a Variational Autoencoder (VAE) with a (unconditional) flow matching model.” With the deadline neatly placed during the weekend of Fall Break and students enabled to work in groups of one to three, eight groups quickly formed and began to experiment with different architectures. Submissions opened a week before the deadline and continued on a rolling basis until the deadline afternoon of October 12. Furthermore, instructor, Dr.&nbsp;Scott Hawley, created an automatically-updating, independent scoring mechanism which gave students live feedback on how to improve their submission. Metrics included the speed of the sample, loss score,and divergence, among others, with parameters equally split between the autoencoder aspect and the flow model aspect.</p>
+<p>The competition concluded with an awards ceremony for the winners, featuring Dr.&nbsp;Hawley offering a smorgasbord of “swag” and Elijah Konkle walking away with the most prized selection, a pair of WandB airpods. First-placed winner Marco Cassar highlighted the competition’s ability to move abstract concepts into a physical implementation. He explained, “It was an opportunity to take the concepts we learned piecemeal from Jupyter Notebooks and use them to build and create our own project from scratch.” Hari Patel summarized his experience more succinctly: “I had fun.” Regardless of the student’s final position during the leaderboard competition, every student agreed that the competitive aspect of the assignment, as well as the opportunity to experiment from scratch. Out of the four different “sections” of the course, students gravitated towards this one as the most educational, engaging, and rewarding.</p>
 </section>
 </section>
 <section id="conclusion-and-discussion" class="level2">
@@ -271,24 +296,61 @@ ul.task-list li input[type="checkbox"] {
 <p>Beyond technical outcomes, our project highlighted the value of teaching guidance for educational impact. Implementing custom code into existing model architectures gave students a deeper understanding of how flow models are built and how they behave under external conditioning. Working with guidance directly helped develop an intuition for how latent gradient impacts interact with the model’s learned trajectory. Additionally, exploring different forms of fine-tuning and time scheduling showed how these choices can directly influence guidance effectiveness. Together, these experiences suggest that project-based learning is a uniquely effective tactic for understanding machine learning ideas, especially within flow-based systems.</p>
 <p>Looking forward, there is room for growth. Implementing guidance on larger audio generative models would allow for a stronger influence on musical attributes and help overcome the rigidity we observed in smaller architectures. Future work can further explore ways to address the limitations of CREPE-based pitch classification, specifically the challenges of calculating loss within continuous systems. Developing methods that create greater impact between the guidance steps and experimenting with alternate guidance schedules may also shape outcomes more effectively. Working to map the latent space of models like Stable Audio Open Small teaches valuable skills in optimization and understanding architectural limitations, laying the foundation for growth in both students and future guidance techniques.</p>
 </section>
-<section id="poster-presented-at-belmont-universitys-surs-2025" class="level2">
-<h2 class="anchored" data-anchor-id="poster-presented-at-belmont-universitys-surs-2025">Poster Presented at Belmont University’s SURS 2025</h2>
+<section id="poster-presented-at-belmont-universitys-science-undergraduate-research-symposium-2025" class="level2">
+<h2 class="anchored" data-anchor-id="poster-presented-at-belmont-universitys-science-undergraduate-research-symposium-2025">Poster Presented at Belmont University’s <a href="https://www.belmont.edu/science-math/student-research/surs.html">Science Undergraduate Research Symposium 2025</a></h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://hackmd.io/_uploads/B1QNBt_GZe.png" class="img-fluid figure-img"></p>
 <figcaption>Screenshot 2025-12-11 at 11.53.34 AM</figcaption>
 </figure>
 </div>
-</section>
-<section id="acknowledgement" class="level2">
-<h2 class="anchored" data-anchor-id="acknowledgement">Acknowledgement</h2>
-<p>Your mom</p>
+
 
 
 </section>
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-hawley2025flowwithwhat" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">S. H. Hawley, <span>“Flow with what you know,”</span> in <em>The fourth blogpost track at ICLR 2025</em>, 2025. Available: <a href="https://openreview.net/forum?id=3XlPoJeDu4">https://openreview.net/forum?id=3XlPoJeDu4</a></div>
+</div>
+<div id="ref-lipman2023flow" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">Y. Lipman, R. T. Q. Chen, H. Ben-Hamu, M. Nickel, and M. Le, <span>“Flow matching for generative modeling,”</span> in <em><span class="nocase">The Eleventh International Conference on Learning Representations (ICLR)</span></em>, 2023. Available: <a href="https://openreview.net/forum?id=PqvMRDCJT9t">https://openreview.net/forum?id=PqvMRDCJT9t</a></div>
+</div>
+<div id="ref-dao2023flowmatchinglatentspace" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">Q. Dao, H. Phung, B. Nguyen, and A. Tran, <span>“Flow matching in latent space.”</span> 2023. Available: <a href="https://arxiv.org/abs/2307.08698">https://arxiv.org/abs/2307.08698</a></div>
+</div>
+<div id="ref-feng2025guidanceflowmatching" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">R. Feng, C. Yu, W. Deng, P. Hu, and T. Wu, <span>“On the guidance of flow matching.”</span> 2025. Available: <a href="https://arxiv.org/abs/2502.02150">https://arxiv.org/abs/2502.02150</a></div>
+</div>
+<div id="ref-evans2024stableaudioopen" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">Z. Evans, J. D. Parker, C. Carr, Z. Zukowski, J. Taylor, and J. Pons, <span>“Stable audio open.”</span> 2024. Available: <a href="https://arxiv.org/abs/2407.14358">https://arxiv.org/abs/2407.14358</a></div>
+</div>
+<div id="ref-ho2022classifier" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[6] </div><div class="csl-right-inline">J. Ho and T. Salimans, <span>“Classifier-free diffusion guidance,”</span> <em>arXiv:2207.12598</em>, 2022.</div>
+</div>
+<div id="ref-bansal2023universal" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[7] </div><div class="csl-right-inline">A. Bansal <em>et al.</em>, <span>“Universal guidance for diffusion models,”</span> in <em>CVPR</em>, 2023, pp. 843–852.</div>
+</div>
+<div id="ref-gao2025diffusionmeetsflow" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[8] </div><div class="csl-right-inline">R. Gao, E. Hoogeboom, J. Heek, V. D. Bortoli, K. P. Murphy, and T. Salimans, <span>“Diffusion meets flow matching: Two sides of the same coin,”</span> 2024. Available: <a href="https://diffusionflow.github.io/">https://diffusionflow.github.io/</a></div>
+</div>
+<div id="ref-Hawley_2025" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[9] </div><div class="csl-right-inline">S. H. Hawley, <span>“Flow where you want,”</span> <em>Dr. Scott Hawley</em>. 2025. Available: <a href="https://drscotthawley.github.io/blog/posts/FlowWhereYouWant.html">https://drscotthawley.github.io/blog/posts/FlowWhereYouWant.html</a></div>
+</div>
+<div id="ref-martin2025pnpflowplugandplayimagerestoration" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[10] </div><div class="csl-right-inline">S. Martin, A. Gagneux, P. Hagemann, and G. Steidl, <span>“PnP-flow: Plug-and-play image restoration with flow matching.”</span> 2025. Available: <a href="https://arxiv.org/abs/2410.02423">https://arxiv.org/abs/2410.02423</a></div>
+</div>
+<div id="ref-morrison_torchcrepe_2023" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[11] </div><div class="csl-right-inline">M. Morrison, <span>“<span class="nocase">torchcrepe</span>.”</span> Oct. 2023. Available: <a href="https://github.com/maxrmorrison/torchcrepe">https://github.com/maxrmorrison/torchcrepe</a></div>
+</div>
+<div id="ref-kim2018crepe" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[12] </div><div class="csl-right-inline">J. W. Kim, J. Salamon, P. Li, and J. P. Bello, <span>“Crepe: A convolutional representation for pitch estimation,”</span> in <em>2018 IEEE international conference on acoustics, speech and signal processing (ICASSP)</em>, IEEE, 2018, pp. 161–165.</div>
+</div>
+<div id="ref-kim2025flowdps" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[13] </div><div class="csl-right-inline">J. Kim, B. S. Kim, and J. C. Ye, <span>“FlowDPS: Flow-driven posterior sampling for inverse problems.”</span> 2025. Available: <a href="https://arxiv.org/abs/2503.08136">https://arxiv.org/abs/2503.08136</a></div>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
